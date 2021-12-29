@@ -1,0 +1,38 @@
+[
+  {
+    "model": "api_seating.rank",
+    "pk": 1,
+    "fields": {
+      "name": "1e rang"
+    }
+  },
+  {
+    "model": "api_seating.rank",
+    "pk": 2,
+    "fields": {
+      "name": "2e rang"
+    }
+  },
+  {
+    "model": "api_seating.rank",
+    "pk": 3,
+    "fields": {
+      "name": "3e rang"
+    }
+  },
+  {
+    "model": "api_seating.rank",
+    "pk": 4,
+    "fields": {
+      "name": "4e rang"
+    }
+  },
+  {
+    "model": "api_seating.rank",
+    "pk": 5,
+    "fields": {
+      "name": "1e rang+"
+    }
+  }
+]
+

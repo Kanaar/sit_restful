@@ -1,0 +1,27 @@
+[
+  {
+    "model": "api_seating.section",
+    "pk": 1,
+    "fields": {
+      "name": "main",
+      "is_balcony": false
+    }
+  },
+  {
+    "model": "api_seating.section",
+    "pk": 2,
+    "fields": {
+      "name": "1st balcony",
+      "is_balcony": true
+    }
+  },
+  {
+    "model": "api_seating.section",
+    "pk": 3,
+    "fields": {
+      "name": "2nd balcony",
+      "is_balcony": true
+    }
+  }
+]
+
