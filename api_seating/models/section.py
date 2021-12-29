@@ -12,6 +12,8 @@ class Section(models.Model):
     position = models.CharField(max_length=50, choices=POSITION_CHOICES, default='c')
     is_balcony = models.BooleanField(default=False)
     is_loge = models.BooleanField(default=False)
+    is_curved = models.BooleanField(default=False)
+    # could also add degrees for dynamic frontend rendering
 
     def capacity(self):
         "max number of seats"
