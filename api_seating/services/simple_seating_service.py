@@ -1,7 +1,7 @@
 from .models import Row, Seat, Ticket
 import numpy as np
 
-class AllocateSeatsService():
+class SimpleSeatingService():
     def __init__(self, orders):
         self.orders = orders
         self.section = orders.first().section
