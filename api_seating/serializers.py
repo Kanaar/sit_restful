@@ -2,9 +2,10 @@ from rest_framework import serializers
 from .models import Order, Rank, Row, Seat, Section, Ticket
 
 class SectionSerializer(serializers.ModelSerializer):
+    # TODO: add verbose_name
     class Meta:
         model = Section
-        fields = ('name', 'is_balcony')
+        fields = ('name', 'position',)
 
 class RankSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -14,25 +15,33 @@ class RankSerializer(serializers.HyperlinkedModelSerializer):
 class RowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Row
-        fields = ('number', 'is_front', 'is_curved')
+        fields = ('number',)
         section = SectionSerializer()
 
 class SeatSerializer(serializers.ModelSerializer):
+    row = RowSerializer()["number"]
+    rank = RankSerializer()["name"]
+
     class Meta:
         model = Seat
-        rank = RankSerializer()
-        row = RowSerializer()
-        fields = ('number', 'is_aisle')
+        fields = ('rank', 'row', 'number', )
 
 class TicketSerializer(serializers.ModelSerializer):
+    seat = SeatSerializer()
+
     class Meta:
         model = Ticket
-        seat = SeatSerializer()
-        fields = ('seat')
+        fields = ('seat', )
 
 class OrderSerializer(serializers.HyperlinkedModelSerializer):
+    section = SectionSerializer()
+    tickets = TicketSerializer(many=True)
+
     class Meta:
-        # tickets = serializers.StringRelatedField(many=True)
         model = Order
-        fields = ('name', 'email', 'amount_of_tickets', 'pref_aisle')
-        rank = RankSerializer()
+        fields = ('name',
+                  'email',
+                  'amount_of_tickets',
+                  'section',
+                  'tickets')
+
