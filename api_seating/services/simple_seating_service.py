@@ -20,12 +20,10 @@ class SimpleSeatingService():
         and rank. The order or seats meanders over the rows
         """
         # NOTE if area size grows this will become too expensive
-        row_ids = Seat.objects.filter(rank=rank).values_list('row')
-        rows = Row.objects.filter(id__in=row_ids, section=section)
-        seats = Seat.objects.filter(row__in=rows, rank=rank)
+        seats = Seat.objects.section_rank(section=section, rank=rank)
         seats_ordered = np.array([])
 
-        for inx, row in enumerate(rows):
+        for inx, row in enumerate(seats.rows()):
             row_seats = seats.filter(row=row)
             if inx % 2:
                 array = np.array(row_seats.order_by('-number'))

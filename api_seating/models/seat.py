@@ -1,6 +1,8 @@
 from django.db import models
+from api_seating.querysets import SeatQuerySet
 
 class Seat(models.Model):
+    objects = SeatQuerySet.as_manager()
     rank = models.ForeignKey("Rank", on_delete=models.CASCADE, null=True)
     row = models.ForeignKey("Row", on_delete=models.CASCADE, null=True)
     number = models.IntegerField()
