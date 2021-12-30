@@ -1,15 +1,19 @@
-from .models import Row, Seat, Section, Rank
+from .models import Row, Seat, Ticket
 import numpy as np
 
 class AllocateSeatsService():
-    def __init__(self):
-        self.section = Section.objects.get(name="main")
-        self.rank = Rank.objects.get(name="1e rang")
+    def __init__(self, orders):
+        self.orders = orders
+        self.section = orders.first().section
+        self.rank = orders.first().rank
+        # TODO: check if orders are in same section and rank
+        self.seats_ordered = self.ordered_section_seats(self.section, self.rank)
 
     def call(self):
       "creates tickets for a queryeset of orders"
-      seats_ordered = self.ordered_section_seats(self.section, self.rank)
-      return [(seat.row.number, seat.number) for seat in seats_ordered]
+      import ipdb;ipdb.set_trace()
+      for order in self.orders:
+          pass
 
     def ordered_section_seats(self, section, rank):
         """
@@ -29,5 +33,7 @@ class AllocateSeatsService():
                 array = np.array(row_seats.order_by('number'))
             seats_ordered = np.append(seats_ordered, array)
         return seats_ordered
+
+
 
 
