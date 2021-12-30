@@ -1,0 +1,12 @@
+
+[
+  {
+  "name": "Rich",
+    "email": "Rich@email.com",
+    "amount_of_tickets": 4,
+    "section": {
+        "name": "main",
+        "position": "c"
+    }
+  }
+]
