@@ -1,4 +1,4 @@
-from .models import Row, Seat, Ticket
+from api_seating.models import Row, Seat, Ticket
 import numpy as np
 
 class SimpleSeatingService():
@@ -19,6 +19,7 @@ class SimpleSeatingService():
         returns a queryset with seats to be filled with users for a section
         and rank. The order or seats meanders over the rows
         """
+        # NOTE if area size grows this will become too expensive
         row_ids = Seat.objects.filter(rank=rank).values_list('row')
         rows = Row.objects.filter(id__in=row_ids, section=section)
         seats = Seat.objects.filter(row__in=rows, rank=rank)
