@@ -19,7 +19,7 @@ for row_i, seats in enumerate(main_row_lengths):
   if row_i == 0:
     front = True
     rank = Rank.objects.get(name="1e rang+")
-  elif row_i >= 5:
+  elif row_i >= 4:
     rank = Rank.objects.get(name="2e rang")
   else:
     rank = Rank.objects.get(name="1e rang")

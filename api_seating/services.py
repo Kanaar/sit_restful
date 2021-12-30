@@ -11,17 +11,16 @@ class AllocateSeatsService():
 
     def call(self):
       "creates tickets for a queryeset of orders"
-      import ipdb;ipdb.set_trace()
       for order in self.orders:
-          pass
+          self.allocate_group(order, self.seats_ordered)
 
     def ordered_section_seats(self, section, rank):
         """
         returns a queryset with seats to be filled with users for a section
         and rank. The order or seats meanders over the rows
         """
-        row_ids = Seat.objects.filter(rank=self.rank).values_list('row')
-        rows = Row.objects.filter(id__in=row_ids, section=self.section)
+        row_ids = Seat.objects.filter(rank=rank).values_list('row')
+        rows = Row.objects.filter(id__in=row_ids, section=section)
         seats = Seat.objects.filter(row__in=rows, rank=rank)
         seats_ordered = np.array([])
 
@@ -34,6 +33,19 @@ class AllocateSeatsService():
             seats_ordered = np.append(seats_ordered, array)
         return seats_ordered
 
+    def allocate_group(self, order, seats_ordered):
+        "creates tickets for each order and places users in their seats"
+        nt = order.amount_of_tickets
+        for seat in seats_ordered[:nt]:
+            Ticket.objects.create(order=order, seat=seat)
+            seat.is_booked = True
+            seat.save()
+        self.seats_ordered = np.delete(seats_ordered, list(range(nt)))
 
+    def print_layout(self):
+        row_ids = Seat.objects.filter(rank=self.rank).values_list('row')
+        rows = Row.objects.filter(id__in=row_ids, section=self.section)
+        row_seats = [Seat.objects.filter(row=row, rank=self.rank).order_by('number') for row in rows]
 
-
+        for seat in row_seats:
+            print(seat.values_list('ticket__order__name'))
