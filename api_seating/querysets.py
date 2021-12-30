@@ -6,6 +6,10 @@ class SeatQuerySet(models.QuerySet):
         "returns a queryset with seats that are not blocked"
         return self.filter(is_blocked=False, is_booked=False)
 
+    def not_blocked(self):
+        "returns a queryset with seats that are not blocked"
+        return self.filter(is_blocked=False)
+
     def are_booked(self):
         "returns a queryset with seats that are not blocked"
         return self.filter(is_booked=True)

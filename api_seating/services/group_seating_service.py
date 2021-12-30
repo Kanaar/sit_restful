@@ -11,7 +11,6 @@ class GroupSeatingService():
         self.rows_seats_arranged = self.arrange_row_seats(self.section, self.rank)
 
     def call(self):
-      # NOTE realized that a backtracking algorithm could be suitable
       "creates tickets for a queryeset of orders"
       for order in self.orders:
           self.allocate_to_row(order, self.rows_seats_arranged, self.n_attempts)
@@ -25,14 +24,49 @@ class GroupSeatingService():
         nt = order.amount_of_tickets
 
         for inx, row_seats in enumerate(rows_seats_arranged):
-            available_seats = row_seats.filter(is_blocked=False, is_booked=False)
-            if available_seats.count() > 0 and order.tickets.count() < nt:
+            if row_seats.are_available().count() > 0 and order.tickets.count() < nt:
                 attempt += 1
                 group_possible, seat_inx = self.allocate_to_seat(order, row_seats, nt)
                 if group_possible == True:
                     self.allocate_tickets(order, rows_seats_arranged, inx, seat_inx)
                 elif attempt > n_attempts:
-                    self.allocate_tickets(order, rows_seats_arranged, inx - n_attempts, 0)
+                    self.try_backtrack(order, inx, n_attempts)
+                elif inx == len(rows_seats_arranged) - 1:
+                    self.try_backtrack(order, inx, n_attempts)
+                    # perhaps run this one from the back so not all single chairs are filled
+                    # with a large group that nearly fits on the last row
+
+    def try_backtrack(self, order, row_inx, n_attempts):
+      if self.backtrack(order, row_inx, n_attempts) == True:
+          print('backtracked')
+      else:
+          print(f'couldnt backtrack order {order}')
+          self.allocate_tickets(order, self.rows_seats_arranged, row_inx - n_attempts, 0)
+
+    def backtrack(self, order, row_inx, n_attempts):
+      """
+      Check if sitting together is possible in the row where prev_order sits if prev_order would
+      move one row backward ...Do this max_backtracking iterations ... not when prev_order_seats.count()
+      > row_seats.count() / 2
+      """
+      # to return tuple similar to allocate_to_seat
+      if order.amount_of_tickets > (self.rows_seats_arranged[row_inx].not_blocked().count() / 2):
+          return False
+      else:
+          order_inx = list(self.orders).index(order)
+          prev_order = self.orders[order_inx-1]
+          prev_order2 = self.orders[order_inx-2]
+          row_seats = self.rows_seats_arranged[row_inx-1]
+          removed_seats = prev_order.seats() | prev_order2.seats()
+          availability_bools = [ True if seat in removed_seats else seat.is_available() for seat in row_seats ]
+
+          seat_allocation = self.allocate_to_seat(order, row_seats, order.amount_of_tickets)
+          return False
+
+      # rows_seats_arranged[row_inx - 1]
+      # Check if sitting together is possible in the row where prev_order sits if prev_order would move one row backward
+      # Do this max_backtracking iterations
+
 
     def allocate_to_seat(self, order, row_seats, nt):
         """
@@ -48,6 +82,7 @@ class GroupSeatingService():
                 return (False, 0)
 
     def allocate_tickets(self, order, rows_seats_arranged, starting_row_index, starting_seat_index):
+        # NOTE: could give 'direction' attr to determine the direction of filling the row
         nt = order.amount_of_tickets
         for row_seats in rows_seats_arranged[starting_row_index:]:
             for seat in row_seats:

@@ -1,4 +1,5 @@
 from django.db import models
+from .seat import Seat
 
 class Order(models.Model):
     name = models.CharField(max_length=100)
@@ -11,3 +12,5 @@ class Order(models.Model):
     def __str__(self):
         return self.name
 
+    def seats(self):
+        return Seat.objects.filter(ticket__order=self)
