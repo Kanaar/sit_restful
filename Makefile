@@ -25,3 +25,5 @@ dbrefresh:
 	python manage.py flush
 	python seeds.py
 
+demo:
+	python demo.py

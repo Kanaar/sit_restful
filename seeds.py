@@ -7,18 +7,26 @@ call_command('loaddata', 'fixtures/rank.json')
 call_command('loaddata', 'fixtures/section.json')
 
 main = Section.objects.get(name="main")
-main_row_lengths = [8, 8, 8]
+main_row_lengths = [5, 8, 8, 8, 10, 10]
 
 for row_i, seats in enumerate(main_row_lengths):
   front = True if row_i == 0 else False
   row = Row.objects.create(section=main, number=row_i+1, is_front=front)
   seat_numbers = list(range(1, seats + 1))
 
+  if row_i == 0:
+    front = True
+    rank = Rank.objects.get(name="1e rang+")
+  elif row_i >= 5:
+    rank = Rank.objects.get(name="2e rang")
+  else:
+    rank = Rank.objects.get(name="1e rang")
+
   for seat_i, seat in enumerate(seat_numbers):
     aisle = True if seat == seat_numbers[0] or seat == seat_numbers[-1] else False
     Seat.objects.create(row=row,
                         number=seat,
-                        rank=Rank.objects.get(name="1e rang"),
+                        rank=rank,
                         is_aisle=aisle
                         )
 
