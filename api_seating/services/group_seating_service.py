@@ -1,7 +1,6 @@
 from api_seating.models import Row, Seat, Ticket, Order
 
 class GroupSeatingService():
-
     def __init__(self, orders, n_front, n_back):
           self.orders = orders
           self.n_front = n_front
