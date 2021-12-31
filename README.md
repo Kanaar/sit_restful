@@ -18,13 +18,16 @@ make dbreset
 # Usage:
 
 <ins>Preparing</ins><br>
-The file `seeds.py` includes seeds with `groups_of_users` as per assignment description. Feel free to
-play around and change the size of orders, rows and seats. It is user tested and should all work well for different sets of data.<br>
+The file `seeds.py` includes seeds with `groups_of_users` as per assignment description. A `group_of_users` was translated into instances of Order and `groups_of_users` as an OrderQueryset. Feel free to play around and change the size of orders, rows and seats. It is user tested and should all work well for different sets of data.<br>
 <br>
 Since the algorithm creates intances of tickets the database need to be flushed of those to re-run the algorithm. For simplicity you can flush and re-seed the database with the command `make dbrefresh`<br>
 <br>
 <ins>Execution</ins><br>
 Ther are two algorithms available, the simple and advanced. These can be found in `api_seating.services`<br>
+<br>
+Simple: `SimpleSeatingService`
+Improved: `GroupSeatingService`<br>
+<br>
 The algorithms can be executed with the command `make demo` and will print out the results of the rows as
 a list of querysets. For the improved algorithm a verbose call option is available that prints the matrix at every change so the course of actions can be followed. <br>
 <br>
@@ -35,15 +38,15 @@ If moving the order upward or backtracking downward will not place the group tog
 <br>
 
 # API:
-<br>
-run a local server: `make s`<br>
+
+run a local server: `make s` <br>
 <br>
 Determine for what `order_id` the ticket information needs to be retrieved.<br>
 Ticket wallet endpoint: `http://127.0.0.1:8000/orders/order_id`<br>
 
 
 # Suggestions for refactoring:
-- Not creating and deleting Ticket instances but collecting the information in a dict or dataframe first and creating all Tickets in the end when the final layout is clear could improve performance.
+- Not creating and deleting Ticket instances but collecting the information in a dict or dataframe first and creating all Tickets in the end when the final layout is clear could improve performance and reduce the risk of 'ghost' instances.
 - Keen to discuss more :)
 
 # Suggestions for further development:
