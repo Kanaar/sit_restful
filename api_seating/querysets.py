@@ -3,7 +3,7 @@ from django.db.models.query import QuerySet
 
 class SeatQuerySet(models.QuerySet):
     def are_available(self):
-        "returns a queryset with seats that are not blocked"
+        "returns a queryset with seats that are not blocked and are not booked"
         booked_ids = [seat.id for seat in self if seat.is_booked() ]
         return self.exclude(id__in=booked_ids, is_blocked=True)
 
@@ -12,6 +12,7 @@ class SeatQuerySet(models.QuerySet):
         return self.filter(is_blocked=False)
 
     def section_rank(self, section, rank):
+        "returns a queyset with seats for a specific section and rank"
         return self.filter(row__section=section, rank=rank)
 
     def rows(self):
