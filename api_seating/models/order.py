@@ -1,7 +1,9 @@
 from django.db import models
 from .seat import Seat
+from api_seating.querysets import OrderQuerySet
 
 class Order(models.Model):
+    objects = OrderQuerySet.as_manager()
     name = models.CharField(max_length=100)
     email = models.EmailField()
     section = models.ForeignKey("Section", on_delete=models.CASCADE, null=True)

@@ -37,8 +37,6 @@ class SimpleSeatingService():
         nt = order.amount_of_tickets
         for seat in seats_ordered[:nt]:
             Ticket.objects.create(order=order, seat=seat)
-            seat.is_booked = True
-            seat.save()
         self.seats_ordered = np.delete(seats_ordered, list(range(nt)))
 
     def print_layout(self):
