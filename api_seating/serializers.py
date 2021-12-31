@@ -41,7 +41,7 @@ class OrderSerializer(serializers.HyperlinkedModelSerializer):
         model = Order
         fields = ('name',
                   'email',
-                  'amount_of_tickets',
+                  'n_tickets',
                   'section',
                   'tickets')
 
