@@ -25,7 +25,6 @@ for row_i, seats in enumerate(main_row_lengths):
     rank = Rank.objects.get(name="1e rang")
 
   # -- Creating seats --
-  print(f'creating seats for row {row.number}')
   for seat_i, seat in enumerate(seat_numbers):
     aisle = True if seat == seat_numbers[0] or seat == seat_numbers[-1] else False
     Seat.objects.create(row=row,
