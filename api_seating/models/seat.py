@@ -6,7 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 class Seat(models.Model):
     objects = SeatQuerySet.as_manager()
     rank = models.ForeignKey("Rank", on_delete=models.CASCADE, null=True)
-    row = models.ForeignKey("Row", on_delete=models.CASCADE, null=True)
+    row = models.ForeignKey("Row", related_name='seats', on_delete=models.CASCADE, null=True)
     number = models.IntegerField()
     is_aisle = models.BooleanField(default=False)
     is_blocked = models.BooleanField(default=False)

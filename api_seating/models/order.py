@@ -1,5 +1,6 @@
 from django.db import models
 from .seat import Seat
+from .ticket import Ticket
 from api_seating.querysets import OrderQuerySet
 
 class Order(models.Model):
@@ -8,7 +9,7 @@ class Order(models.Model):
     email = models.EmailField()
     section = models.ForeignKey("Section", on_delete=models.CASCADE, null=True)
     rank = models.ForeignKey("Rank", on_delete=models.CASCADE, null=True)
-    amount_of_tickets = models.IntegerField()
+    n_tickets = models.IntegerField()
     pref_aisle = models.BooleanField(default=False)
 
     def __str__(self):
@@ -16,3 +17,6 @@ class Order(models.Model):
 
     def seats(self):
         return Seat.objects.filter(ticket__order=self)
+
+    def tickets(self):
+        return Ticket.objects.filter(order=self)

@@ -44,7 +44,7 @@ for i, group in enumerate(groups_of_users):
       name=names_of_groups[i],
       email=f"{names_of_groups[1]}@email.com",
       rank= Rank.objects.get(name="1e rang"),
-      amount_of_tickets=group,
+      n_tickets=group,
       pref_aisle=False,
       section=main
       )

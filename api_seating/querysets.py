@@ -23,7 +23,7 @@ class RowQuerySet(models.QuerySet):
     def having_seats_with_rank(self, rank):
         "returns a queryset with rows that has seats for a specific rank"
         from .models import Seat
-        row_ids = Seat.objects.with_rank(rank).values_list('row')
+        row_ids = Seat.objects.filter(rank=rank).values_list('row')
         return self.filter(id__in=row_ids)
 
 class OrderQuerySet(models.QuerySet):
@@ -36,3 +36,9 @@ class OrderQuerySet(models.QuerySet):
         "returns a queryset with all tickets in orders"
         from .models import Ticket
         return Ticket.objects.filter(order__in=self)
+
+    def prev_orders(self, order, n_back):
+        "returns a queryset with n_back orders previous in the queryset"
+        index = list(self).index(order)
+        prev_orders_ids = [order.id for order in self[index-n_back:index]]
+        return self.filter(id__in=prev_orders_ids)
